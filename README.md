@@ -1,6 +1,6 @@
-# diy-perchance-api
+# DIY Perchance API
 
-Quick and hacky perchance API using puppeteer.
+A quick and hacky Perchance API using [Puppeteer](https://github.com/GoogleChrome/puppeteer).
 
 To install:
 
@@ -28,3 +28,4 @@ Here's a webserver server template that you can remix on Glitch: https://glitch.
 
 Call it like this: https://perchance-api-template.glitch.me/my-generator-name/[output] (but replace `perchance-api-template` with the subdomain that Glitch gives you when you "remix" it.
 
+Check here for more details: https://perchance.org/diy-perchance-api
