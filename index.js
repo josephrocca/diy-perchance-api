@@ -1,13 +1,13 @@
 module.exports = async function() { 
-  const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:true}).catch(e => process.exit(1));
-  let page = await browser.newPage().catch(e => process.exit(1));
+  const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:true});
+  let page = await browser.newPage();
 
   let generator = async function(generatorName, inputText) {
     if(!inputText) inputText = "[$output]";
     let generatorUrl = "https://perchance.org/"+generatorName;
     if(page.url() !== generatorUrl) {
       console.log(`currently at ${page.url()} but need to be at ${generatorUrl}. loading...`);
-      let response = await page.goto(generatorUrl).catch(e => process.exit(1));  
+      let response = await page.goto(generatorUrl);  
       if(Number(response.headers().status) !== 200) return `Error: ${generatorName} doesn't exist?`;
     }
     console.log(`loaded "${generatorName}" generator's page, now evaluating text...`);
@@ -26,14 +26,14 @@ module.exports = async function() {
           console.log(`iframe finished loading. sending evaluateText command for '${inputText}'`);
           document.querySelector("#output iframe").contentWindow.postMessage({text:inputText, callerId:"85295798546246", command:"evaluateText"}, '*');
         });
-      }, inputText).catch(e => process.exit(1))
+      }, inputText),
     ]);
 
     console.log("INPUT:", inputText, "OUTPUT:", result.error ? result.error : result);
 
     if(result.error === 'timeout') {
       console.log("Spinning up new page due to timeout error (potentially an infinite loop)");
-      page = await browser.newPage().catch(e => process.exit(1));
+      page = await browser.newPage();
       return `Error: Took too long to compute. generatorName:${generatorName} inputText:${inputText}`;
     } else {
       return result;
