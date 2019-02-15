@@ -8,6 +8,7 @@ module.exports = async function() {
     if(page.url() !== generatorUrl) {
       console.log(`currently at ${page.url()} but need to be at ${generatorUrl}. loading...`);
       let response = await page.goto(generatorUrl);  
+      console.log(`Error: ${generatorName} doesn't exist?`);
       if(Number(response.headers().status) !== 200) return `Error: ${generatorName} doesn't exist?`;
     }
     console.log(`loaded "${generatorName}" generator's page, now evaluating text...`);
