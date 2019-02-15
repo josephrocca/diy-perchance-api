@@ -6,7 +6,7 @@ quick and hacky perchance api using puppeteer
 npm i josephrocca/diy-perchance-api
 ```
 
-```
+```js
 const api = await require('josephrocca/diy-perchance-api')()
 await api('my-generator-name', '[output]');
 await api('my-generator-name', 'the [a=animal.selectOne] is amongst the other [a.pluralForm]]');
