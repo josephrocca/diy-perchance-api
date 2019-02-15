@@ -3,6 +3,7 @@ module.exports = async function() {
   let page = await browser.newPage().catch(e => process.exit(1));
 
   let generator = async function(generatorName, inputText) {
+    if(!inputText) inputText = "[$output]";
     let generatorUrl = "https://perchance.org/"+generatorName;
     if(page.url() !== generatorUrl) {
       console.log(`currently at ${page.url()} but need to be at ${generatorUrl}. loading...`);
