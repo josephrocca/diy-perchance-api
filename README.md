@@ -1,13 +1,23 @@
 # diy-perchance-api
 
-Quick and hacky perchance api using puppeteer.
+Quick and hacky perchance API using puppeteer.
+
+To install:
 
 ```
 npm i josephrocca/diy-perchance-api
 ```
+Or directly edit your package.json file:
+```
+"dependencies": {
+  ...
+  "diy-perchance-api": "git+https://github.com/josephrocca/diy-perchance-api"
+},
+```
+
 
 ```js
-const api = await require('josephrocca/diy-perchance-api')()
+const api = await require('diy-perchance-api')()
 await api('my-generator-name', '[output]');
 await api('my-generator-name', 'the [a=animal.selectOne] is amongst the other [a.pluralForm]]');
 ```
