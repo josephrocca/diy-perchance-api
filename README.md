@@ -1,6 +1,6 @@
 # DIY Perchance API
 
-A quick and hacky Perchance API using [Puppeteer](https://github.com/GoogleChrome/puppeteer).
+A quick and hacky Perchance API using [puppeteer](https://github.com/GoogleChrome/puppeteer).
 
 To install:
 
