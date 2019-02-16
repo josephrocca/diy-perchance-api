@@ -1,5 +1,5 @@
-module.exports = async function() { 
-  const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:true});
+module.exports = async function(opts={}) { 
+  const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:!!opts.dumpio});
   let page = await browser.newPage();
 
   let generator = async function(generatorName, inputText) {
