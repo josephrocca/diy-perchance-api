@@ -1,6 +1,10 @@
 module.exports = async function(opts={}) { 
   const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:!!opts.dumpio});
   let page = await browser.newPage();
+  
+  page.on("error", async function(error) {
+    throw error;
+  });
 
   let generator = async function(generatorName, inputText) {
     if(!inputText) inputText = "[$output]";
