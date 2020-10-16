@@ -1,10 +1,33 @@
 module.exports = async function(opts={}) { 
-  const browser = await require("puppeteer").launch({args:["--no-sandbox"], dumpio:!!opts.dumpio});
-  let page = await browser.newPage();
   
-  page.on("error", async function(error) {
-    throw error;
-  });
+  const puppeteerOptions = {
+    args:[
+      "--no-sandbox",
+      // Below args are to reduce CPU load, from here: https://stackoverflow.com/questions/49008008/chrome-headless-puppeteer-too-much-cpu
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--single-process",
+      "--disable-gpu",
+    ],
+    dumpio:!!opts.dumpio,
+  };
+  
+  async function createBrowserAndPage() {
+    let browser = await require("puppeteer").launch(puppeteerOptions);
+    let page = await browser.newPage();
+    await page.setDefaultTimeout(10000); 
+    page.on("dialog", dialog => {
+      dialog.dismiss();
+    });
+    page.on("error", async msg => {
+      await browser.close();
+      throw msg;
+    });
+    return {browser, page};
+  }
+
+  let {browser, page} = await createBrowserAndPage();
 
   let generator = async function(generatorName, inputText) {
     if(!inputText) inputText = "[$output]";
@@ -36,9 +59,10 @@ module.exports = async function(opts={}) {
 
     console.log("INPUT:", inputText, "OUTPUT:", result.error ? result.error : result);
 
-    if(result.error === 'timeout') {
-      console.log("Spinning up new page due to timeout error (potentially an infinite loop)");
-      page = await browser.newPage();
+    if(result.error === "timeout") {
+      console.log("Spinning up new browser due to timeout error (potentially an infinite loop)");
+      await browser.close();
+      let browserAndPage = await createBrowserAndPage(), browser = browserAndPage.browser, page = browserAndPage.page;
       return `Error: Took too long to compute. generatorName:${generatorName} inputText:${inputText}`;
     } else {
       return result;
