@@ -35,11 +35,15 @@ module.exports = async function(opts={}) {
     if(page.url() !== generatorUrl) {
       console.log(`currently at ${page.url()} but need to be at ${generatorUrl}. loading....`);
       let response = await page.goto(generatorUrl);  
-      if(!response.status().toString().startsWith("2")) return `Error: ${generatorName} doesn't exist? Headers: ${JSON.stringify(response.headers())}`;
+      //console.log("STATUS:", response.status(), response.headers().status);
+      if(!response.status().toString().startsWith("2")) {
+        await page.goto("about:blank");
+        return `Error: ${generatorName} doesn't exist? Headers: ${JSON.stringify(response.headers())}`;
+      }
     }
     console.log(`loaded "${generatorName}" generator's page, now evaluating text...`);
     let result = await Promise.race([
-      new Promise(r => setTimeout(r, 5000, {error:'timeout'})),
+      new Promise(r => setTimeout(r, 10000, {error:'timeout'})),
       page.evaluate(async (inputText) => {
         return new Promise(async (resolve, reject) => {
           window.addEventListener("message", async (e) => {
