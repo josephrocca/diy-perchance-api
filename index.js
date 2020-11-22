@@ -37,6 +37,7 @@ module.exports = async function(opts={}) {
       let response = await page.goto(generatorUrl);  
       //console.log("STATUS:", response.status(), response.headers().status);
       if(!response.status().toString().startsWith("2")) {
+        console.log(`${generatorName} doesn't exist`);
         await page.goto("about:blank");
         return `Error: ${generatorName} doesn't exist? Headers: ${JSON.stringify(response.headers())}`;
       }
